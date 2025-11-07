@@ -25,7 +25,7 @@ public class FrmFuncionario extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
-        setResizable(false); // 👈 Ventana con tamaño fijo
+        setResizable(false); 
 
         JLabel lblTitulo = new JLabel("CRUD de Funcionarios");
         lblTitulo.setBounds(380, 10, 300, 30);
@@ -130,16 +130,16 @@ public class FrmFuncionario extends JFrame {
         }, 0);
 
         tabla = new JTable(modelo);
-        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // 👈 Para que aparezca scroll horizontal si se necesita
+        tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
 
-        // 👇 Ajuste de ancho total y scroll
+        
         scroll = new JScrollPane(tabla);
-        scroll.setBounds(330, 50, 580, 280); // Más angosta para no tapar botones
+        scroll.setBounds(330, 50, 580, 280); 
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scroll);
 
-        // Listeners
+        
         btnAgregar.addActionListener(e -> agregar());
         btnActualizar.addActionListener(e -> actualizar());
         btnEliminar.addActionListener(e -> eliminar());
