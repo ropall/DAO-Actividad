@@ -28,28 +28,48 @@ public class FuncionarioDAO {
         List<Funcionario> funcionarios = new ArrayList<>();
         String sql = "SELECT * FROM funcionario";
         try (Connection conn = ConexionBD.getConnection();
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql)) {
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
                 Funcionario f = new Funcionario();
                 f.setIdFuncionario(rs.getInt("id_funcionario"));
+                f.setTipoIdentificacion(rs.getString("tipo_identificacion"));
+                f.setNumeroIdentificacion(rs.getString("numero_identificacion"));
                 f.setNombres(rs.getString("nombres"));
                 f.setApellidos(rs.getString("apellidos"));
-                f.setNumeroIdentificacion(rs.getString("numero_identificacion"));
+                f.setEstadoCivil(rs.getString("estado_civil"));
+                f.setSexo(rs.getString("sexo"));
+                f.setDireccion(rs.getString("direccion"));
+                f.setTelefono(rs.getString("telefono"));
+                java.sql.Date sqlDate = rs.getDate("fecha_nacimiento");
+                if (sqlDate != null) {
+                    f.setFechaNacimiento(sqlDate);
+                } else {
+                    f.setFechaNacimiento(null);
+                }
                 funcionarios.add(f);
             }
         }
         return funcionarios;
     }
     public void actualizar(Funcionario f) throws SQLException {
-        String sql = "UPDATE funcionario SET nombres=?, apellidos=?, direccion=?, telefono=? WHERE id_funcionario=?";
+        String sql = "UPDATE funcionario SET tipo_identificacion=?, numero_identificacion=?, nombres=?, apellidos=?, estado_civil=?, sexo=?, direccion=?, telefono=?, fecha_nacimiento=? WHERE id_funcionario=?";
         try (Connection conn = ConexionBD.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, f.getNombres());
-            ps.setString(2, f.getApellidos());
-            ps.setString(3, f.getDireccion());
-            ps.setString(4, f.getTelefono());
-            ps.setInt(5, f.getIdFuncionario());
+            ps.setString(1, f.getTipoIdentificacion());
+            ps.setString(2, f.getNumeroIdentificacion());
+            ps.setString(3, f.getNombres());
+            ps.setString(4, f.getApellidos());
+            ps.setString(5, f.getEstadoCivil());
+            ps.setString(6, f.getSexo());
+            ps.setString(7, f.getDireccion());
+            ps.setString(8, f.getTelefono());
+            if (f.getFechaNacimiento() != null) {
+                ps.setDate(9, new java.sql.Date(f.getFechaNacimiento().getTime()));
+            } else {
+                ps.setNull(9, java.sql.Types.DATE);
+            }
+            ps.setInt(10, f.getIdFuncionario());
             ps.executeUpdate();
         }
     }
