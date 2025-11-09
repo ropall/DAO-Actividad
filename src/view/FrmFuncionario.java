@@ -207,24 +207,33 @@ public class FrmFuncionario extends JFrame {
 
 private void actualizar() {
     try {
-        if (txtId.getText().isEmpty()) {
+        if (txtId.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Seleccione un funcionario para actualizar.");
             return;
         }
 
         Funcionario f = new Funcionario();
-        f.setIdFuncionario(Integer.parseInt(txtId.getText()));
-        f.setTipoIdentificacion(txtTipoId.getText());
-        f.setNumeroIdentificacion(txtNumeroId.getText());
-        f.setNombres(txtNombres.getText());
-        f.setApellidos(txtApellidos.getText());
-        f.setEstadoCivil(txtEstadoCivil.getText());
-        f.setSexo(txtSexo.getText());
-        f.setDireccion(txtDireccion.getText());
-        f.setTelefono(txtTelefono.getText());
+        f.setIdFuncionario(Integer.parseInt(txtId.getText().trim()));
+        f.setTipoIdentificacion(txtTipoId.getText().trim());
+        f.setNumeroIdentificacion(txtNumeroId.getText().trim());
+        f.setNombres(txtNombres.getText().trim());
+        f.setApellidos(txtApellidos.getText().trim());
+        f.setEstadoCivil(txtEstadoCivil.getText().trim());
+        f.setSexo(txtSexo.getText().trim());
+        f.setDireccion(txtDireccion.getText().trim());
+        f.setTelefono(txtTelefono.getText().trim());
 
-        if (!txtFechaNac.getText().isEmpty()) {
-            f.setFechaNacimiento(Date.valueOf(txtFechaNac.getText()));
+        String fechaText = txtFechaNac.getText().trim();
+        if (!fechaText.isEmpty()) {
+            try {
+                f.setFechaNacimiento(Date.valueOf(fechaText));
+            } catch (IllegalArgumentException iae) {
+                JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Use YYYY-MM-DD.");
+                return;
+            }
+        } else {
+            // dejar explícitamente nulo si no hay fecha
+            f.setFechaNacimiento(null);
         }
 
         dao.actualizar(f);
